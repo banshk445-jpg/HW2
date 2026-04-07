@@ -1,0 +1,16 @@
+# Virtual Environments
+venv/
+env/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS
+.DS_Store
+
+# User Uploads
+temp_uploads/*
+!temp_uploads/.gitkeep
