@@ -83,7 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             if(data.success) {
-                showResult(data.match_name, data.similarity);
+                // Pass user photo as well
+                const userPhoto = document.getElementById('user-photo');
+                if (userPhoto) userPhoto.src = previewImage.src;
+                
+                showResult(data.match_name, data.similarity, data.image_url);
             } else {
                 alert('에러가 발생했습니다: ' + data.message);
                 resetUI();
@@ -95,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function showResult(name, similarity) {
+    function showResult(name, similarity, imageUrl) {
         previewSection.classList.add('hidden');
         imageWrapper.classList.remove('scanning');
         loadingText.classList.add('hidden');
@@ -103,6 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
         resultSection.classList.remove('hidden');
         
         matchName.textContent = name;
+        
+        // 연예인 사진 렌더링 (값이 없거나 위키 오류 시 기본 아바타로 대체)
+        const matchPhoto = document.getElementById('match-photo');
+        if (imageUrl) {
+            matchPhoto.src = imageUrl;
+        } else {
+            matchPhoto.src = `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&size=200`;
+        }
         
         // 0부터 대상 수치까지 애니메이션 숫자 카운트업
         let currentSim = 0;

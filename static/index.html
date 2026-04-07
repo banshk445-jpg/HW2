@@ -51,9 +51,22 @@
             <div id="result-section" class="result-area hidden">
                 <div class="result-card">
                     <div class="match-badge">매칭 완료!</div>
-                    <h2 class="match-name" id="match-name">박보검</h2>
+                    
+                    <!-- 비포/애프터 비교 UI -->
+                    <div class="before-after-container">
+                        <div class="photo-box">
+                            <img id="user-photo" src="" alt="나의 사진">
+                            <p>나의 사진</p>
+                        </div>
+                        <div class="vs-badge">VS</div>
+                        <div class="photo-box">
+                            <img id="match-photo" src="" alt="연예인 사진">
+                            <p class="match-name-small" id="match-name">박보검</p>
+                        </div>
+                    </div>
+
                     <div class="similarity-bar-container">
-                        <div class="similarity-label">일치율: <span id="similarity-value">98.5</span>%</div>
+                        <div class="similarity-label">AI 분석 싱크로율: <span id="similarity-value">98.5</span>%</div>
                         <div class="similarity-bar">
                             <div class="similarity-fill" id="similarity-fill"></div>
                         </div>

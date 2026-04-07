@@ -33,7 +33,8 @@ async def predict_lookalike(file: UploadFile = File(...)) -> Any:
             success=True,
             message="Successfully processed image",
             match_name=result.get("match_name"),
-            similarity=result.get("similarity")
+            similarity=result.get("similarity"),
+            image_url=result.get("image_url")
         )
         
     except Exception as e:
