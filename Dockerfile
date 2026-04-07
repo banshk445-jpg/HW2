@@ -19,7 +19,8 @@ RUN pip install --upgrade pip && \
 RUN mkdir -p /root/.deepface/weights && \
     curl -L -o /root/.deepface/weights/age_model_weights.h5 https://github.com/serengil/deepface_models/releases/download/v1.0/age_model_weights.h5 && \
     curl -L -o /root/.deepface/weights/gender_model_weights.h5 https://github.com/serengil/deepface_models/releases/download/v1.0/gender_model_weights.h5 && \
-    curl -L -o /root/.deepface/weights/vgg_face_weights.h5 https://github.com/serengil/deepface_models/releases/download/v1.0/vgg_face_weights.h5
+    curl -L -o /root/.deepface/weights/vgg_face_weights.h5 https://github.com/serengil/deepface_models/releases/download/v1.0/vgg_face_weights.h5 && \
+    curl -L -o /root/.deepface/weights/facenet512_weights.h5 https://github.com/serengil/deepface_models/releases/download/v1.0/facenet512_weights.h5
 
 
 COPY . .

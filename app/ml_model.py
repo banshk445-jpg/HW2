@@ -28,12 +28,12 @@ class LookalikeModel:
         try:
             DeepFace.build_model("Age")
             DeepFace.build_model("Gender")
-            DeepFace.build_model("VGG-Face")
+            DeepFace.build_model("Facenet512")
         except Exception as e:
             print("모듈 로드 중 (무시 가능):", e)
             
         self.prefetch_images()
-        print("정밀 AI 기반 Lookalike 모델(DeepFace) 임베딩 및 프로필 동기화 완료!")
+        print("정초고성능 AI 기반 Lookalike 모델(Facenet512) 임베딩 및 프로필 동기화 완료!")
 
     def prefetch_images(self):
         # 시작 시 위키백과에서 연예인 사진 URL을 가져오고 얼굴 특징 벡터(Embedding)를 캐싱합니다.
@@ -50,10 +50,10 @@ class LookalikeModel:
                         img_arr = np.asarray(bytearray(response.read()), dtype=np.uint8)
                         img = cv2.imdecode(img_arr, -1)
                         if img is not None:
-                            reps = DeepFace.represent(img_path=img, model_name="VGG-Face", enforce_detection=False)
+                            reps = DeepFace.represent(img_path=img, model_name="Facenet512", enforce_detection=False)
                             if reps and len(reps) > 0:
                                 celeb["embedding"] = reps[0]["embedding"]
-                                print(f"[{celeb['name']}] 얼굴 임베딩 추출 성공!")
+                                print(f"[{celeb['name']}] 얼굴 임베딩(Facenet512) 추출 성공!")
                 except Exception as e:
                     print(f"[{celeb['name']}] 얼굴 임베딩 추출 실패: {e}")
 
@@ -86,8 +86,8 @@ class LookalikeModel:
                 
             candidates = self.male_celebs if dominant_gender == "Man" else self.female_celebs
             
-            # 2. 사용자 얼굴의 2622차원 고정밀 임베딩 추출
-            user_reps = DeepFace.represent(img_path=image_path, model_name="VGG-Face", enforce_detection=False)
+            # 2. 사용자 얼굴의 512차원 초고정밀 임베딩 추출 (Facenet512)
+            user_reps = DeepFace.represent(img_path=image_path, model_name="Facenet512", enforce_detection=False)
             if not user_reps or len(user_reps) == 0:
                 raise Exception("얼굴 벡터 추출 실패")
                 
@@ -97,7 +97,7 @@ class LookalikeModel:
             best_img = None
             max_sim = -999.0
             
-            # 3. 코사인 유사도(Cosine Similarity)를 통한 진짜 생김새 매칭
+            # 3. 코사인 유사도(Cosine Similarity)를 통한 매칭
             for celeb in candidates:
                 celeb_emb_list = celeb.get("embedding")
                 if celeb_emb_list is not None:
@@ -114,8 +114,9 @@ class LookalikeModel:
                     best_match = celeb["name"]
                     best_img = celeb["image_url"]
             
-            # 임베딩 유사도는 대략 0.5~0.9 사이에 분포. 이를 100점 만점으로 변환
-            similarity_score = max(50.0, min(99.9, max_sim * 100 + random.uniform(3.0, 7.0)))
+            # Facenet512 유사도는 코사인 유사도 기준 대략 0.4~0.8 사이에 분포. 이를 100점 만점으로 변환 시 가중치 조정
+            # 모델이 바뀌었으므로 임계값과 가중치를 조금 더 타이트하게 보정
+            similarity_score = max(40.0, min(99.9, max_sim * 100 + random.uniform(2.0, 5.0)))
             
             return {
                 "match_name": best_match,
