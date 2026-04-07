@@ -23,7 +23,13 @@ class LookalikeModel:
         ]
         
         self.prefetch_images()
-        print("정밀 AI 기반 Lookalike 모델(DeepFace) 및 프로필 사진 연동 완료!")
+        print("AI 가중치 모델 사전 적재 시작 (초기 요청 지연 방지)...")
+        try:
+            DeepFace.build_model("Age")
+            DeepFace.build_model("Gender")
+        except Exception as e:
+            print("모듈 로드 중 (무시 가능):", e)
+        print("정밀 AI 기반 Lookalike 모델(DeepFace) 및 프로필 동기화 완료!")
 
     def prefetch_images(self):
         # 시작 시 위키백과에서 연예인 사진 URL을 미리 고속으로 캐싱해옵니다. (안정성 보장)
@@ -52,7 +58,7 @@ class LookalikeModel:
         try:
             analysis = DeepFace.analyze(
                 img_path=image_path, 
-                actions=['age', 'gender', 'emotion'],
+                actions=['age', 'gender'],
                 enforce_detection=False
             )
             
@@ -65,8 +71,6 @@ class LookalikeModel:
             except:
                 dominant_gender = "Woman"
                 
-            dominant_emotion = face_data.get("dominant_emotion", "neutral")
-            
             candidates = self.male_celebs if dominant_gender == "Man" else self.female_celebs
             
             best_match = None
@@ -75,9 +79,8 @@ class LookalikeModel:
             
             for celeb in candidates:
                 age_diff = abs((celeb["age_range"][0] + celeb["age_range"][1])/2 - detected_age)
-                emotion_penalty = 0 if celeb["dominant_emotion"] == dominant_emotion else 10
-                
-                score = age_diff + emotion_penalty
+                # 감정 페널티 제거 속도 최적화
+                score = age_diff
                 if score < min_score:
                     min_score = score
                     best_match = celeb["name"]
