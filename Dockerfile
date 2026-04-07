@@ -1,14 +1,13 @@
-FROM python:3.10-slim
+FROM python:3.10
 
 WORKDIR /app
 
 COPY requirements.txt .
 
 # 파이썬 패키지 설치
-# deepface 설치 시 자동으로 끌려와서 libGL 오류를 유발하는 일반 opencv를 지우고, 패키지가 없는 상태에서도 작동하는 headless 버전으로 다시 덮어씁니다.
-RUN pip install --no-cache-dir -r requirements.txt && \
-    pip uninstall -y opencv-python opencv-contrib-python || true && \
-    pip install --no-cache-dir opencv-python-headless
+# python:3.10(Full 이미지)를 사용하여 libGL 등 기본 리눅스 라이브러리가 이미 포함되어 있으므로 충돌 없이 깨끗하게 설치합니다.
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
