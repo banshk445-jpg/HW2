@@ -38,10 +38,10 @@ jobs:
       - name: 최신 이미지 로컬로 풀(Pull)
         run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/lookalike-mlops:latest
         
-      - name: 새로운 컨테이너 로컬 머신에서 포트 8000으로 실행
+      - name: 새로운 컨테이너 로컬 머신에서 포트 8001로 실행
         run: |
           docker run -d \
             --name lookalike-api \
-            -p 8000:8000 \
+            -p 8001:8000 \
             --restart unless-stopped \
             ${{ secrets.DOCKERHUB_USERNAME }}/lookalike-mlops:latest

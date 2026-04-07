@@ -14,3 +14,5 @@ __pycache__/
 # User Uploads
 temp_uploads/*
 !temp_uploads/.gitkeep
+actions-runner*/
+*.tar.gz
