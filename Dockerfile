@@ -4,7 +4,7 @@ WORKDIR /app
 
 # 파이썬 화면 및 이미지 퍼즐 조립용 핵심 리눅스 라이브러리(libGL)를 통째로 다운로드하여 코어에 주입시킵니다.
 RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
