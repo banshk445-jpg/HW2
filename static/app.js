@@ -44,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function handleFile(file) {
-        if (!file.type.startsWith('image/')) {
+        // Mac 환경(.heic 등)에서 파일 type이 비어 튕기는 문제를 방어합니다.
+        if (!file.type.startsWith('image/') && !file.name.toLowerCase().match(/\.(jpg|jpeg|png|heic|heif|webp)$/i)) {
             alert('이미지 파일만 업로드 가능합니다.');
             return;
         }
